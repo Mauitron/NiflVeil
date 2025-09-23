@@ -25,7 +25,7 @@
          :space-evenly false
       (label :text "Minimized Windows" :class "title")
       (button :class "close-btn"
-              :onclick "eww close niflveil"
+              :onclick "eww --config /etc/xdg/eww/widgets/niflveil/ close niflveil"
         "✕"))
 (button :class "restore-all-btn"
         :onclick "niflveil restore-all"
