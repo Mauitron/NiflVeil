@@ -6,6 +6,7 @@ authors = ["Maui_The_Magnificent"]
 description = "A window minimizer for Hyprland"
 
 [dependencies]
+serde_json = "1.0.145"
 
 [profile.release]
 opt-level = 3

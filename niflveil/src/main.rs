@@ -39,6 +39,39 @@ struct MinimizedWindow {
     icon: String,
 }
 
+fn get_focused_monitor() -> io::Result<String> {
+    let output = Command::new("hyprctl")
+        .args(["monitors", "-j"])
+        .output();
+
+    match output {
+        Ok(output) if output.status.success() => {
+            let monitors_json = String::from_utf8_lossy(&output.stdout);
+
+            // Try to parse the JSON
+            if let Ok(monitors) = serde_json::from_str::<serde_json::Value>(&monitors_json) {
+                if let Some(monitor) = monitors
+                    .as_array()
+                    .and_then(|arr| arr.iter().find(|m| m["focused"].as_bool().unwrap_or(false)))
+                {
+                    if let Some(id) = monitor["id"].as_i64() {
+                        return Ok(id.to_string());
+                    }
+                }
+            }
+
+            // Parsing failed or no focused monitor found -> fallback
+            eprintln!("⚠️  Could not determine focused monitor, falling back to 0");
+            Ok("0".to_string())
+        }
+        _ => {
+            // hyprctl itself failed -> fallback
+            eprintln!("⚠️  hyprctl failed, falling back to monitor 0");
+            Ok("0".to_string())
+        }
+    }
+}
+
 fn get_app_icon(class_name: &str) -> String {
     ICONS
         .iter()
@@ -223,11 +256,14 @@ fn show_restore_menu() -> io::Result<()> {
         return Ok(());
     }
 
+    let monitor = get_focused_monitor()?;
     let eww_result = Command::new("eww")
         .args([
             "--config",
             "/etc/xdg/eww/widgets/niflveil/",
             "open",
+            "--screen",
+            &monitor,
             "niflveil",
         ])
         .output()?;
@@ -241,14 +277,14 @@ fn show_restore_menu() -> io::Result<()> {
         println!("Eww window opened successfully");
     }
 
-    Command::new("eww")
-        .args([
-            "--config",
-            "/etc/xdg/eww/widgets/niflveil/",
-            "close",
-            "niflveil",
-        ])
-        .output()?;
+    // Command::new("eww")
+    //     .args([
+    //         "--config",
+    //         "/etc/xdg/eww/widgets/niflveil/",
+    //         "close",
+    //         "niflveil",
+    //     ])
+    //     .output()?;
 
     Ok(())
 }

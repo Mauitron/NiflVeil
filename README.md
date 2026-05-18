@@ -39,6 +39,13 @@ cargo build --release
 
 # Copy the binary to your path
 sudo cp target/release/niflveil /usr/local/bin/
+
+# If using EWW
+# Create the niflveil widget folder in /etc/xdg/eww/widgets
+mkdir /etc/xdg/eww/widgets/niflveil
+
+# Copy eww contents to widgets folder
+sudo cp eww/* /etc/xdg/eww/widgets/niflveil/ 
 ```
 
 ### 2. Add the bindings you want to your Hyprland config:
@@ -58,6 +65,9 @@ bind = SUPER, U, exec, /usr/local/bin/niflveil restore-last
 
 # Restore all minimized windows 
 bind = $mainMod SHIFT, U, exec, /usr/local/bin/niflveil restore-all
+
+# Close EWW interface with ESC key
+bindn = , escape, exec, eww --config /etc/xdg/eww/widgets/niflveil/ close niflveil
 
 # PS: If you are using the EWW window, add the following to the end
 # of the bindings: "&& eww reload --config /etc/xdg/eww/widgets/niflveil"
