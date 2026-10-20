@@ -241,14 +241,14 @@ fn show_restore_menu() -> io::Result<()> {
         println!("Eww window opened successfully");
     }
 
-    Command::new("eww")
-        .args([
-            "--config",
-            "/etc/xdg/eww/widgets/niflveil/",
-            "close",
-            "niflveil",
-        ])
-        .output()?;
+    //Command::new("eww")
+    //    .args([
+    //        "--config",
+    //        "/etc/xdg/eww/widgets/niflveil/",
+    //        "close",
+    //        "niflveil",
+    //   ])
+    //   .output()?;
 
     Ok(())
 }
