@@ -241,6 +241,11 @@ fn show_restore_menu() -> io::Result<()> {
         println!("Eww window opened successfully");
     }
 
+// Don't remember why this was put here in the first place.
+// I'll keep it commented out for the time being, if something
+// comes up. On the off-chance this needs to be re-implemented 
+// quickly in the near future.
+    
     //Command::new("eww")
     //    .args([
     //        "--config",
